@@ -1,8 +1,9 @@
 import sys
 import os
 import subprocess
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QSlider, QLabel, QDesktopWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QSlider, QLabel, QDesktopWidget, QSystemTrayIcon, QMenu, QAction
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 
 class OSDSlider(QWidget):
     def __init__(self):
@@ -11,7 +12,7 @@ class OSDSlider(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         layout = QVBoxLayout()
@@ -21,7 +22,7 @@ class OSDSlider(QWidget):
         layout.addWidget(self.label)
 
         self.slider = QSlider(Qt.Vertical)
-        self.slider.setMinimum(1)  # Mudança para o mínimo de 1
+        self.slider.setMinimum(1)
         self.slider.setMaximum(9)
         self.slider.setTickPosition(QSlider.TicksLeft)
         self.slider.setTickInterval(1)
@@ -89,12 +90,45 @@ class OSDSlider(QWidget):
         else:
             print("Tela com resolução 1920x515 não encontrada.")
 
+class SystemTrayIcon(QSystemTrayIcon):
+    def __init__(self, osd_slider, parent=None):
+        super(SystemTrayIcon, self).__init__(parent)
+        self.setIcon(QIcon("icon.svg"))  # Substitua "icon.png" pelo caminho para o ícone desejado
+
+        self.osd_slider = osd_slider
+
+        # Criando menu de contexto
+        self.menu = QMenu(parent)
+
+        self.show_action = QAction("Mostrar controle de brilho", self.menu)
+        self.show_action.triggered.connect(self.show_osd_slider)
+        self.menu.addAction(self.show_action)
+
+        self.hide_action = QAction("Ocultar controle de brilho", self.menu)
+        self.hide_action.triggered.connect(self.hide_osd_slider)
+        self.menu.addAction(self.hide_action)
+
+        self.quit_action = QAction("Sair", self.menu)
+        self.quit_action.triggered.connect(QApplication.instance().quit)
+        self.menu.addAction(self.quit_action)
+
+        self.setContextMenu(self.menu)
+
+    def show_osd_slider(self):
+        self.osd_slider.show()
+
+    def hide_osd_slider(self):
+        self.osd_slider.hide()
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     osd_slider = OSDSlider()
     osd_slider.move_to_target_screen()
     osd_slider.show()
+
+    system_tray_icon = SystemTrayIcon(osd_slider)
+    system_tray_icon.show()
 
     sys.exit(app.exec_())
 
