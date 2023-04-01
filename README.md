@@ -1,4 +1,4 @@
-# brightslider
+# Bright Slider Zenbook Duo
 Slider for second display to run on Asus Zenbook Duo
 
 This should be run with https://github.com/Plippo/screenpad-tools 
