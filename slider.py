@@ -17,7 +17,7 @@ class OSDSlider(QWidget):
 
         layout = QVBoxLayout()
 
-        self.label = QLabel("Brilho")
+        self.label = QLabel("")
         self.label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.label)
 
@@ -93,22 +93,22 @@ class OSDSlider(QWidget):
 class SystemTrayIcon(QSystemTrayIcon):
     def __init__(self, osd_slider, parent=None):
         super(SystemTrayIcon, self).__init__(parent)
-        self.setIcon(QIcon("icon.svg"))  # Substitua "icon.png" pelo caminho para o ícone desejado
+        self.setIcon(QIcon("/opt/brightslider/icon.svg"))  # Substitua "icon.png" pelo caminho para o ícone desejado
 
         self.osd_slider = osd_slider
 
         # Criando menu de contexto
         self.menu = QMenu(parent)
 
-        self.show_action = QAction("Mostrar controle de brilho", self.menu)
+        self.show_action = QAction("Show OSD", self.menu)
         self.show_action.triggered.connect(self.show_osd_slider)
         self.menu.addAction(self.show_action)
 
-        self.hide_action = QAction("Ocultar controle de brilho", self.menu)
+        self.hide_action = QAction("Hide OSD", self.menu)
         self.hide_action.triggered.connect(self.hide_osd_slider)
         self.menu.addAction(self.hide_action)
 
-        self.quit_action = QAction("Sair", self.menu)
+        self.quit_action = QAction("Exit", self.menu)
         self.quit_action.triggered.connect(QApplication.instance().quit)
         self.menu.addAction(self.quit_action)
 
