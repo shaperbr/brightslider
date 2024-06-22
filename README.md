@@ -12,10 +12,12 @@ Pre requisites
 
 Create a folder /opt/brightslider and put everything there.
 
-To run, just execute python3 slider.py and it will open on your second screen at the top left.
+To run, just execute nohup python3 slider.py & and it will open on your second screen at the top left.
 
 Should be on gnome system tray to show, hide and close.
 
 I suggest to put it into gnome initialize the script
 
-This is running on Ubuntu 22.10 with Wayland.
+This is running on Ubuntu 22.04 with X11 and Wayland.
+
+I'm currenctly running PopOS.
